@@ -1,0 +1,24 @@
+#docker_compose yaml
+version: "3.9"
+services:
+  database:
+    image: "postgres"
+    env_file:
+      - database.env
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    container_name: "database"
+    ports:
+      - "5432:5432"
+  app:
+    build: .
+    container_name: "app"
+    depends_on:
+      - "database"
+    environment:
+      - POSTGRES_HOST=database
+    links:
+      - "database"
+
+volumes:
+  database-data:
