@@ -1,24 +1,26 @@
 #docker_compose yaml
-version: "3.9"
+version: '3.9'
 services:
-  database:
-    image: "postgres"
-    env_file:
-      - database.env
+  database_pg:
+    image: postgres
+    container_name: database_pg
     volumes:
       - database-data:/var/lib/postgresql/data
-    container_name: "database"
     ports:
-      - "5432:5432"
+      - '5433:5432'
+    env_file:
+      - database.env
+
   app:
     build: .
-    container_name: "app"
+    container_name: app
     depends_on:
-      - "database"
+      - database_pg
+    env_file:
+      - database.env
     environment:
-      - POSTGRES_HOST=database
-    links:
-      - "database"
+      - POSTGRES_HOST=database_pg
 
 volumes:
   database-data:
+    driver: local

@@ -1,7 +1,6 @@
-FROM python:3
-ENV PYTHONUNBUFFERED=1
+FROM python:latest
 WORKDIR /code
-COPY requirements.txt /code/
+ADD requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-COPY . /code/
-RUN python main.py
+COPY . ./
+CMD ["python","-u", "main.py"]

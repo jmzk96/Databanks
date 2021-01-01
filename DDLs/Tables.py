@@ -1,20 +1,22 @@
 import psycopg2
-from dotenv import load_dotenv
 import os
 
-load_dotenv("database.env") #Name von .env Datei muss spezifiziert werden
 user = os.getenv("POSTGRES_USER")
 dbname = os.getenv("POSTGRES_DB")
 password = os.getenv("POSTGRES_PASSWORD")
 port = os.getenv("POSTGRES_PORT")
-host =os.getenv("POSTGRES_HOST")
+host = os.getenv("POSTGRES_HOST")
+
+print(host, port, user, password, dbname)
+
 
 class DatabankCreator:
 
     def __init__(self):
-        self.connector =psycopg2.connect(host =host,user=user,dbname=dbname,password=password,port=port)
+        self.connector = psycopg2.connect(
+            host=host, user=user, dbname=dbname, password=password, port=port)
 
-    def create_tables(self,with_drop:bool=True):
+    def create_tables(self, with_drop: bool = True):
         with self.connector as conn:
             with conn.cursor() as cursor:
                 if with_drop:
@@ -32,8 +34,6 @@ class DatabankCreator:
                     print("Database/Table already exists")
                 else:
                     print("Table successfully created")
-
-
 
     def close_connector(self):
         self.connector.close()
